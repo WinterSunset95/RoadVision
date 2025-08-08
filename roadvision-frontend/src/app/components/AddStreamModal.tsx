@@ -53,18 +53,18 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center text-black">
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md m-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Add New Feed</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
+          <button onClick={onClose} className="text-black hover:text-black">
             <X size={24} />
           </button>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Feed Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-black">Feed Name</label>
               <input
                 type="text"
                 id="name"
@@ -75,7 +75,7 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
               />
             </div>
             <div>
-              <label htmlFor="source" className="block text-sm font-medium text-gray-700">Source URL</label>
+              <label htmlFor="source" className="block text-sm font-medium text-black">Source URL</label>
               <input
                 type="text"
                 id="source"
@@ -88,10 +88,10 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
           </div>
           {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
           <div className="mt-6 flex justify-end space-x-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-black rounded-md hover:bg-gray-300">
               Cancel
             </button>
-            <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300">
+            <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-blue-600 text-black rounded-md hover:bg-blue-700 disabled:bg-blue-300">
               {isSubmitting ? 'Adding...' : 'Add Stream'}
             </button>
           </div>

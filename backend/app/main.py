@@ -30,8 +30,9 @@ class StreamManager:
         self.processing_thread.start()
 
     def _simulate_processing(self):
+        # This method will be remoed later, for now it simulates the processing of the AI model
         while True:
-            time.sleep(5)
+            time.sleep(20)
             with self.lock:
                 if not self.streams:
                     continue
@@ -93,11 +94,14 @@ class StreamManager:
             command = [
                 "ffmpeg",
                 "-i", stream["source"],
-                "-c:v", "copy",
+                "-c:v", "libx264",
+                "-preset", "veryfast",
+                "-crf", "23",
+                "-pix_fmt", "yuv420p",
                 "-c:a", "aac",
                 "-f", "hls",
-                "-hls_time", "4",
-                "-hls_list_size", "5",
+                "-hls_time", "2",
+                "-hls_list_size", "10",
                 "-hls_flags", "delete_segments",
                 playlist_path
             ]
@@ -113,6 +117,43 @@ class StreamManager:
             stream["hls_url"] = f"http://localhost:8000/hls/{stream_id}/playlist.m3u8"
 
             return stream["hls_url"]
+
+    def stop_hls_conversion(self, stream_id):
+        with self.lock:
+            if stream_id in self.active_conversions:
+                print(f"Stopping FFmpeg for stream {stream_id}")
+                process = self.active_conversions.pop(stream_id)
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+
+                stream = self.streams.get(stream_id)
+                if stream:
+                    stream["status"] = "Running"
+                    stream["hls_url"] = None
+
+                self.cleanup_stream_hls(stream_id)
+            return False
+
+    def cleanup_stream_hls(self, stream_id):
+        stream_output_dir = os.path.join(HLS_OUTPUT_DIR, stream_id)
+        if os.path.exists(stream_output_dir):
+            print(f"Removing HLS output directory for stream {stream_id}")
+            subprocess.run(["rm", "-rf", stream_output_dir])
+
+    def shutdown(self):
+        print("INFO: Shutting down the RoadVision backend...")
+        with self.lock:
+            active_ids = list(self.active_conversions.keys())
+            for stream_id in active_ids:
+                self.stop_hls_conversion(stream_id)
+
+        if os.path.exists(HLS_OUTPUT_DIR):
+            print("Removing HLS output directory")
+            subprocess.run(["rm", "-rf", HLS_OUTPUT_DIR])
+        os.mkdir(HLS_OUTPUT_DIR)
 
 
 ## Pydantic Models
@@ -179,8 +220,12 @@ async def play_stream(stream_id: str):
 @app.on_event("startup")
 async def startup_event():
     print("INFO: Starting up the RoadVision backend...")
-    stream_manager.add_stream("Test Cam1 (RTSP)", "rtsp://807e9439d5ca.entrypoint.cloud.wowza.com:1935/app-rC94792j/068b9c9a_stream2")
-    stream_manager.add_stream("Test Cam2 (RTSP)", "rtsp://demo:demo@ipvmdemo.dyndns.org:5541/onvif-media/media.amp?profile=profile_1_h264&sessiontimeout=60&streamtype=unicast")
+    #stream_manager.add_stream("Test Cam1 (RTSP)", "rtsp://807e9439d5ca.entrypoint.cloud.wowza.com:1935/app-rC94792j/068b9c9a_stream2")
+    #stream_manager.add_stream("Test Cam2 (RTSP)", "rtsp://demo:demo@ipvmdemo.dyndns.org:5541/onvif-media/media.amp?profile=profile_1_h264&sessiontimeout=60&streamtype=unicast")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    stream_manager.shutdown()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

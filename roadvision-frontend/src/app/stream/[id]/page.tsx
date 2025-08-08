@@ -1,5 +1,6 @@
 // app/stream/[id]/page.tsx
 'use client';
+import { useParams } from 'next/navigation';
 
 import { useEffect, useState } from 'react';
 import { Stream } from '@/app/lib/types';
@@ -13,14 +14,25 @@ async function getStreamById(id: string): Promise<Stream | null> {
     const res = await fetch(`http://127.0.0.1:8000/api/streams`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed to fetch data');
     const streams: Stream[] = await res.json();
-    return streams.find(s => s.id === id) || null;
+    let currStream = streams.find(s => s.id === id) || null;
+    const res2 = await fetch(`http://127.0.0.1:8000/api/play/${id}`, {
+      method: 'POST',
+    });
+    if (!res2.ok) throw new Error('Failed to fetch data');
+    const data = await res2.json();
+    if (!currStream) {
+      return null;
+    }
+    currStream.source = data.hls_url;
+    return currStream;
   } catch (error) {
     console.error(error);
     return null;
   }
 }
 
-export default function StreamDetailPage({ params }: { params: { id: string } }) {
+export default function StreamDetailPage() {
+  const params = useParams();
   const [stream, setStream] = useState<Stream | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,12 +40,14 @@ export default function StreamDetailPage({ params }: { params: { id: string } })
     if (!params.id) return;
 
     const fetchData = async () => {
-      const data = await getStreamById(params.id);
+      const data = await getStreamById(params.id as string);
+      console.log(data)
       setStream(data);
       setIsLoading(false);
     };
 
     fetchData();
+
   }, [params.id]);
 
   if (isLoading) {
@@ -57,7 +71,7 @@ export default function StreamDetailPage({ params }: { params: { id: string } })
   };
 
   return (
-    <main className="container mx-auto p-4">
+    <main className="container mx-auto p-4 text-black">
       <Link href="/" className="inline-flex items-center text-blue-600 hover:underline mb-4">
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Dashboard
