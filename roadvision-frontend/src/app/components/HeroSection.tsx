@@ -4,9 +4,9 @@ export default function HeroSection() {
     <div className="relative bg-slate-900">
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1599911949034-18358b14a7e2?q=80&w=2070&auto=format&fit=crop" 
+          src="/dashcam.jpg" 
           alt="Road from a dashcam perspective"
-          className="w-full h-full object-cover opacity-30"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
       </div>
