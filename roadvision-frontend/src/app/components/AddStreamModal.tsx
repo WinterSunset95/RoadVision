@@ -1,14 +1,13 @@
 // components/AddStreamModal.tsx
 'use client';
 
-import React from 'react';
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
 interface AddStreamModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onStreamAdded: () => void; // Callback to refresh the stream list
+  onStreamAdded: () => void;
 }
 
 export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddStreamModalProps) {
@@ -37,10 +36,9 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
         throw new Error('Failed to add stream. Please check the backend.');
       }
       
-      // Clear form and close modal
       setName('');
       setSource('');
-      onStreamAdded(); // Trigger refresh
+      onStreamAdded();
       onClose();
 
     } catch (err: any) {
@@ -53,45 +51,45 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center text-black">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md m-4">
+    <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4 text-black">
+      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Add New Feed</h2>
-          <button onClick={onClose} className="text-black hover:text-black">
+          <h2 className="text-2xl font-bold text-slate-800">Add New Feed</h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-800">
             <X size={24} />
           </button>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-black">Feed Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-slate-700">Feed Name</label>
               <input
                 type="text"
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., Downtown Route 5"
               />
             </div>
             <div>
-              <label htmlFor="source" className="block text-sm font-medium text-black">Source URL</label>
+              <label htmlFor="source" className="block text-sm font-medium text-slate-700">Source URL</label>
               <input
                 type="text"
                 id="source"
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="https://.../stream.m3u8 or /path/to/video.mp4"
+                className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="rtsp://... or https://.../stream.m3u8"
               />
             </div>
           </div>
           {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
           <div className="mt-6 flex justify-end space-x-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-black rounded-md hover:bg-gray-300">
+            <button type="button" onClick={onClose} className="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300">
               Cancel
             </button>
-            <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-blue-600 text-black rounded-md hover:bg-blue-700 disabled:bg-blue-300">
+            <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300">
               {isSubmitting ? 'Adding...' : 'Add Stream'}
             </button>
           </div>
@@ -100,4 +98,3 @@ export default function AddStreamModal({ isOpen, onClose, onStreamAdded }: AddSt
     </div>
   );
 }
-

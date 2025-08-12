@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import videojs from 'video.js';
+import Player from 'video.js/dist/types/player';
 import 'video.js/dist/video-js.css';
 
 // IMPORTANT: Import the HLS plugin
@@ -15,7 +16,7 @@ interface VideoPlayerProps {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ options }) => {
   const videoRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<Player>(null);
 
   useEffect(() => {
     // Make sure Video.js player is only initialized once
@@ -40,8 +41,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ options }) => {
   // Dispose the Video.js player when the component unmounts
   useEffect(() => {
     const player = playerRef.current;
+
+    if (!player) return;
+    player.on('ready', () => {
+      console.log("player ready")
+    })
+    player.on('error', () => {
+      console.log("player error")
+      // On player error, wait 5 seconds and reinitialize the player
+      setTimeout(() => {
+        // window.location.reload();
+      }, 3000);
+    })
+
     return () => {
-      if (player && !player.isDisposed()) {
+      if (!player) return
+      if (!player.isDisposed()) {
         player.dispose();
         playerRef.current = null;
       }
@@ -49,8 +64,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ options }) => {
   }, [playerRef]);
 
   return (
-    <div data-vjs-player>
-      <div ref={videoRef} />
+    <div className='w-full h-full' data-vjs-player>
+      <div ref={videoRef} className='w-full h-full flex justify-center items-center' />
     </div>
   );
 };

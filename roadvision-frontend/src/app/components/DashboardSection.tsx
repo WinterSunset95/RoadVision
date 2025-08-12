@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { Stream } from '@/app/lib/types';
 import StreamCard from '@/app/components/StreamCard';
 import AddStreamModal from '@/app/components/AddStreamModal';
-import { Plus, VideoOff } from 'lucide-react';
+import { ArrowRight, Plus, VideoOff } from 'lucide-react';
+import Link from 'next/link';
 
 interface DashboardSectionProps {
   streams: Stream[];
@@ -22,23 +23,27 @@ export default function DashboardSection({ streams, isLoading, error, onStreamAd
       <AddStreamModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onStreamAdded={() => {
-          onStreamAdded();
-        }}
+        onStreamAdded={onStreamAdded}
       />
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Live Analysis Feeds</h2>
+        <div className="flex justify-between items-center mb-8 gap-2">
+          <h2 className="text-3xl font-bold text-slate-900 grow">Live Analysis Feeds</h2>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
           >
             <Plus size={20} className="mr-2" />
             Add New Feed
           </button>
+          <Link href="/multi_monitor"
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
+          >
+            Monitor View
+            <ArrowRight size={20} className="ml-2" />
+          </Link>
         </div>
 
-        {isLoading && <div className="text-center p-10 text-gray-500">Loading active feeds...</div>}
+        {isLoading && <div className="text-center p-10 text-slate-500">Loading active feeds...</div>}
         {error && <div className="text-center p-10 text-red-500">Error: {error}</div>}
         
         {!isLoading && !error && (
@@ -49,10 +54,10 @@ export default function DashboardSection({ streams, isLoading, error, onStreamAd
               ))}
             </div>
           ) : (
-            <div className="text-center p-16 bg-gray-50 rounded-lg border-2 border-dashed">
-              <VideoOff className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-semibold text-gray-900">No active feeds</h3>
-              <p className="mt-1 text-sm text-gray-500">Get started by adding a new video feed.</p>
+            <div className="text-center p-16 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
+              <VideoOff className="mx-auto h-12 w-12 text-slate-400" />
+              <h3 className="mt-2 text-sm font-semibold text-slate-800">No active feeds</h3>
+              <p className="mt-1 text-sm text-slate-500">Get started by adding a new video feed.</p>
             </div>
           )
         )}
@@ -60,4 +65,3 @@ export default function DashboardSection({ streams, isLoading, error, onStreamAd
     </section>
   );
 }
-

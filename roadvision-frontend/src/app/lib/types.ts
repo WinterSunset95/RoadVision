@@ -7,4 +7,5 @@ export interface Stream {
   detections: number;
   alerts: string[];
   last_update: string;
+  hls_url: string;
 }

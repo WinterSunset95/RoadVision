@@ -37,7 +37,7 @@ export default function HomePage() {
   }, [fetchStreams]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-slate-100 min-h-screen">
       <Navbar />
       <main>
         <HeroSection />
@@ -55,4 +55,3 @@ export default function HomePage() {
     </div>
   );
 }
-

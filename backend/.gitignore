@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 hls_output/
+*.mp4
+*.pt
+yolov7/
