@@ -1,0 +1,3 @@
+[submodule "frontendv2"]
+	path = frontendv2
+	url = https://github.com/WinterSunset95/RoadVisionChatBotFrontend

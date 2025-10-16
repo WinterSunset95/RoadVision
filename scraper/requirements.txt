@@ -59,6 +59,7 @@ Pygments==2.19.2
 pyparsing==3.2.5
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
 python-slugify==8.0.4
 pyxdg==0.28
 PyYAML==6.0.3
