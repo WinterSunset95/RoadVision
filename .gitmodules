@@ -1,3 +1,12 @@
 [submodule "frontendv2"]
 	path = frontendv2
 	url = https://github.com/WinterSunset95/RoadVisionChatBotFrontend
+[submodule "chatbot-frontend"]
+	path = chatbot-frontend
+	url = https://github.com/WinterSunset95/RoadVisionChatBotFrontend
+[submodule "chatbot-backend"]
+	path = chatbot-backend
+	url = https://github.com/WinterSunset95/RoadVisionChatbotBackend
+[submodule "scraper"]
+	path = scraper
+	url = https://github.com/WinterSunset95/RoadVisionEmailScraper
