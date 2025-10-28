@@ -10,3 +10,9 @@
 [submodule "scraper"]
 	path = scraper
 	url = https://github.com/WinterSunset95/RoadVisionEmailScraper
+[submodule "vms-frontend"]
+	path = vms-frontend
+	url = https://github.com/WinterSunset95/RoadVisionVMSFrontend
+[submodule "vms-backend"]
+	path = vms-backend
+	url = https://github.com/WinterSunset95/RoadVisionVMSBackend
