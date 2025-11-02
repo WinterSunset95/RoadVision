@@ -16,3 +16,6 @@
 [submodule "vms-backend"]
 	path = vms-backend
 	url = https://github.com/WinterSunset95/RoadVisionVMSBackend
+[submodule "ceigall-suite"]
+	path = ceigall-suite
+	url = https://github.com/WinterSunset95/ceigall-suite
